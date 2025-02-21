@@ -5,6 +5,7 @@ from .models import Book
 from .forms import BookForm
 from django.core.paginator import Paginator
 from django.http import HttpResponse
+
 def book_list(request):
     books = Book.objects.all()
     return render(request, 'bookstore.html', {'books': books, 'view_type': 'list'})
@@ -36,5 +37,3 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'bookstore.html', {'book': book, 'view_type': 'delete'})
-
-# Для важных моментов - https://docs.djangoproject.com/en/5.1/
