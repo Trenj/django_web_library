@@ -37,3 +37,4 @@ def book_delete(request, pk):
         return redirect('book_list')
     return render(request, 'bookstore.html', {'book': book, 'view_type': 'delete'})
 
+# Для важных моментов - https://docs.djangoproject.com/en/5.1/
