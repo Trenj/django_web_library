@@ -88,6 +88,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'echoapp.User'
 
 
 # Password validation

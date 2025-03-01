@@ -1,7 +1,15 @@
-
-# Create your models here.
-
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    ROLE_CHOICES = [
+        ('user', 'User'),
+        ('admin', 'Admin'),
+    ]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+
+    def is_admin(self):
+        return self.role == 'admin'
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
