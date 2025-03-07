@@ -1,10 +1,122 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход{% endblock %}
 
 {% block content %}
-<h2>Vhod</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Voiti</button>
-</form>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">Вход в систему</h2>
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <h5>Пожалуйста, исправьте следующие ошибки:</h5>
+                        <ul class="mb-0">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
+                            </label>
+                            
+                            {% if field.name == 'password' %}
+                                <div class="input-group">
+                                    <input type="{{ field.field.widget.input_type }}" 
+                                           name="{{ field.html_name }}"
+                                           id="{{ field.id_for_label }}"
+                                           class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                           {% if field.field.required %}required{% endif %}>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <input type="{{ field.field.widget.input_type }}" 
+                                       name="{{ field.html_name }}"
+                                       id="{{ field.id_for_label }}"
+                                       class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                       {% if field.field.required %}required{% endif %}>
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                            
+                            {% if field.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Нет аккаунта? <a href="{% url 'register' %}" class="text-decoration-none">Зарегистрироваться</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Валидация формы
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    // Переключение видимости пароля
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

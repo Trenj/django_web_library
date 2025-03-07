@@ -37,26 +37,26 @@ def is_admin(user):
 @login_required
 def book_create(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('book_list')
     else:
         form = BookForm()
-    return render(request, 'bookstore.html', {'form': form, 'title': 'Add New Book', 'view_type': 'form'})
+    return render(request, 'echoapp/bookstore.html', {'form': form, 'title': 'Добавить книгу', 'view_type': 'form'})
 
 @login_required
 @user_passes_test(is_admin)
 def book_update(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+        form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             form.save()
             return redirect('book_list')
     else:
         form = BookForm(instance=book)
-    return render(request, 'bookstore.html', {'form': form, 'title': 'Edit Book', 'view_type': 'form'})
+    return render(request, 'echoapp/bookstore.html', {'form': form, 'title': 'Редактировать книгу', 'view_type': 'form'})
 
 @login_required
 @user_passes_test(is_admin)
@@ -65,9 +65,8 @@ def book_delete(request, pk):
     if request.method == 'POST':
         book.delete()
         return redirect('book_list')
-    return render(request, 'bookstore.html', {'book': book, 'view_type': 'delete'})
+    return render(request, 'echoapp/bookstore.html', {'book': book, 'view_type': 'delete'})
 
-@login_required
 def book_list(request):
     books = Book.objects.all()
-    return render(request, "book_list.html", {"books": books})
+    return render(request, "echoapp/book_list.html", {"books": books})
