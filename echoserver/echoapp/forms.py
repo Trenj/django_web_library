@@ -10,7 +10,6 @@ class BookForm(forms.ModelForm):
         fields = ['title', 'author', 'price']
 
 
-
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()
 
