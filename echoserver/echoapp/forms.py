@@ -7,7 +7,7 @@ from .models import User
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'author', 'price', 'image']
+        fields = ['title', 'author', 'price']
 
 
 class RegisterForm(UserCreationForm):

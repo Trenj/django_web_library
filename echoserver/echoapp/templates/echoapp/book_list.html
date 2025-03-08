@@ -18,11 +18,6 @@
         {% for book in books %}
         <div class="col">
             <div class="card h-100 shadow-sm">
-                {% if book.image %}
-                    <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
-                {% else %}
-                    <img src="{% static 'images/default-book.jpg' %}" class="card-img-top" alt="Default book image" style="height: 300px; object-fit: cover;">
-                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ book.title }}</h5>
                     <p class="card-text">
