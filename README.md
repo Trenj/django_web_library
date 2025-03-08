@@ -42,7 +42,7 @@
 
 1. Клонируйте репозиторий:
 ```bash
-git clone [URL вашего репозитория]
+git clone https://github.com/Trenj/django-web-library.git
 cd django-web-library
 ```
 
@@ -125,10 +125,6 @@ echoserver/
    - Может удалять книги
    - Имеет доступ к админ-панели
 
-## Лицензия
-
-[Укажите вашу лицензию]
-
 ## Автор
 
-[Ваше имя]
+Andrey Zamyatin
