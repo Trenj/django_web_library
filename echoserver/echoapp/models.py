@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import json
 
 class User(AbstractUser):
     ROLE_CHOICES = [
@@ -22,3 +23,29 @@ class Book(models.Model):
     class Meta:
         verbose_name = 'Книга'
         verbose_name_plural = 'Книги'
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    items = models.JSONField(default=dict)
+
+    def get_items(self):
+        return self.items or {}
+
+    def set_items(self, items):
+        self.items = items
+        self.save()
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    created_at = models.DateTimeField(auto_now_add=True)
+    items = models.JSONField(default=dict)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def set_items(self, cart_items):
+        self.items = json.dumps(cart_items)
+
+    def get_items(self):
+        return json.loads(self.items)
+
+    class Meta:
+        ordering = ['-created_at']

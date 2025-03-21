@@ -1,16 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'echoapp/base.html' %}
 {% load static %}
 
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-body p-4">
-                    <h2 class="text-center mb-4">Вход в систему</h2>
-                    
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center mb-0">Вход в систему</h3>
+                </div>
+                <div class="card-body">
                     {% if form.errors %}
                     <div class="alert alert-danger">
                         <h5>Пожалуйста, исправьте следующие ошибки:</h5>
@@ -24,59 +25,29 @@
                     </div>
                     {% endif %}
 
-                    <form method="post" class="needs-validation" novalidate>
+                    <form method="post" class="p-2">
                         {% csrf_token %}
-                        
                         {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label">
-                                {{ field.label }}
-                                {% if field.field.required %}
-                                    <span class="text-danger">*</span>
-                                {% endif %}
-                            </label>
-                            
-                            {% if field.name == 'password' %}
-                                <div class="input-group">
-                                    <input type="{{ field.field.widget.input_type }}" 
-                                           name="{{ field.html_name }}"
-                                           id="{{ field.id_for_label }}"
-                                           class="form-control {% if field.errors %}is-invalid{% endif %}"
-                                           {% if field.field.required %}required{% endif %}>
-                                    <button class="btn btn-outline-secondary toggle-password" type="button">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                </div>
-                            {% else %}
-                                <input type="{{ field.field.widget.input_type }}" 
-                                       name="{{ field.html_name }}"
-                                       id="{{ field.id_for_label }}"
-                                       class="form-control {% if field.errors %}is-invalid{% endif %}"
-                                       {% if field.field.required %}required{% endif %}>
-                            {% endif %}
-                            
+                        <div class="form-group mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            <div class="input-group">
+                                {{ field }}
+                            </div>
                             {% if field.help_text %}
-                                <div class="form-text">{{ field.help_text }}</div>
+                            <div class="form-text">{{ field.help_text }}</div>
                             {% endif %}
-                            
                             {% if field.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in field.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
+                            <div class="alert alert-danger mt-2">
+                                {{ field.errors }}
+                            </div>
                             {% endif %}
                         </div>
                         {% endfor %}
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Войти</button>
+                            <a href="{% url 'register' %}" class="btn btn-secondary">Регистрация</a>
                         </div>
                     </form>
-
-                    <div class="text-center mt-4">
-                        <p class="mb-0">Нет аккаунта? <a href="{% url 'register' %}" class="text-decoration-none">Зарегистрироваться</a></p>
-                    </div>
                 </div>
             </div>
         </div>
