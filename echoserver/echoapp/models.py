@@ -44,6 +44,7 @@ class Order(models.Model):
     def set_items(self, cart_items):
         self.items = json.dumps(cart_items)
 
+
     def get_items(self):
         return json.loads(self.items)
 
