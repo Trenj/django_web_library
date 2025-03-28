@@ -3,6 +3,10 @@ from .models import Book
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from .models import User
+from django.contrib.auth import get_user_model
+from captcha.fields import CaptchaField
+
+User = get_user_model()
 
 class BookForm(forms.ModelForm):
     class Meta:
@@ -16,7 +20,8 @@ class BookForm(forms.ModelForm):
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
+    email = forms.EmailField(required=True)
+    captcha = CaptchaField()
 
     class Meta:
         model = User
@@ -28,6 +33,8 @@ class RegisterForm(UserCreationForm):
             field.widget.attrs['class'] = 'form-control'
 
 class LoginForm(AuthenticationForm):
+    captcha = CaptchaField()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():

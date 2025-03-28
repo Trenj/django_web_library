@@ -25,6 +25,9 @@
                                 {{ field.errors }}
                             </div>
                             {% endif %}
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
                         </div>
                         {% endfor %}
                         <div class="d-grid gap-2 mt-4">

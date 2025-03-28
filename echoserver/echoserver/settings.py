@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'echoapp',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -94,21 +95,51 @@ AUTH_USER_MODEL = 'echoapp.User'
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+# Настройка системы валидации паролей в Django (активирует проверки при создании/изменении пароля)
 AUTH_PASSWORD_VALIDATORS = [
+    # Первый валидатор: проверяет схожесть пароля с полями пользователя (username, email и т.д.)
     {
+        # Указывает класс валидатора из стандартной библиотеки Django
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        # Настройки валидатора (опционально)
+        'OPTIONS': {
+            'max_similarity': 0.7,  # Максимально допустимая схожесть (0.0 - 1.0)
+        }
     },
+
+    # Второй валидатор: обеспечивает минимальную требуемую длину пароля (по умолчанию 8 символов)
     {
+        # Класс валидатора минимальной длины пароля
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        # Настройки валидатора (опционально)
+        'OPTIONS': {
+            'min_length': 8,  # Минимальная длина пароля
+        }
     },
+
+    # Третий валидатор: блокирует популярные/слабые пароли (типа "123456", "password")
     {
+        # Класс валидатора, проверяющего пароль против списка распространённых комбинаций
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
+
+    # Четвёртый валидатор: запрещает пароли, состоящие только из цифр (например "12345678")
     {
+        # Класс валидатора, отвергающего чисто числовые пароли
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    }
 ]
 
+# Дополнительные настройки безопасности паролей
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',  # Основной алгоритм хеширования
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',  # Резервный алгоритм
+]
+
+# Настройки сессии для безопасности
+SESSION_COOKIE_AGE = 1209600  # Время жизни сессии в секундах (2 недели)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Сессия истекает при закрытии браузера
+SESSION_SAVE_EVERY_REQUEST = True  # Обновление времени жизни сессии при каждом запросе
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -131,3 +162,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Security settings
+SECURE_SSL_REDIRECT = False  # Отключаем для разработки
+SESSION_COOKIE_SECURE = False  # Отключаем для разработки
+CSRF_COOKIE_SECURE = False  # Отключаем для разработки
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# Captcha settings
+CAPTCHA_LENGTH = 4
+CAPTCHA_TIMEOUT = 1
+CAPTCHA_IMAGE_SIZE = (160, 50)
+CAPTCHA_FONT_SIZE = 28
+CAPTCHA_LETTER_ROTATION = (-35, 35)
